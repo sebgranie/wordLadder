@@ -25,20 +25,8 @@ public class DjikstraVertex {
     public DjikstraVertex(String new_word) {
         adjList = new LinkedList<DjikstraVertex>();
         indexList = new LinkedList<Integer>();
-        // int index = n;
         word = new_word;
-        // System.out.println("word :" + word);
     }
-
-    // /**
-    // * copy constructor
-    // */
-    // public DjikstraVertex(DjikstraVertex v) {
-    // adjList = v.getAdjList();
-    // index = v.getIndex();
-    // visited = v.getVisited();
-
-    // }
 
     public int getDistance() {
         return distance;
@@ -81,7 +69,6 @@ public class DjikstraVertex {
     }
 
     public void addToAdjList(DjikstraVertex newVertex) {
-        // adjList.add(new AdjListNode(newVertex));
         adjList.add(newVertex);
     }
 
@@ -95,8 +82,6 @@ public class DjikstraVertex {
 
     public int distance(DjikstraVertex neighbour) {
         int diff = 0;
-        // System.out.println(neighbour.word);
-        // System.out.println(this.word);
         for (int i = 0; i < neighbour.word.length(); i++) {
             if (neighbour.word.charAt(i) != word.charAt(i))
                 diff++;
@@ -108,8 +93,6 @@ public class DjikstraVertex {
         int dist = 0;
         for (int j = 0; j < neigh.word.length(); j++) {
             if (neigh.word.charAt(j) != word.charAt(j)) {
-                // dist = Math.abs(Integer.parseInt(String.valueOf(neigh.word.charAt(j)))
-                // - Integer.parseInt(String.valueOf(word.charAt(j))));
                 dist = Math.abs(
                         Character.getNumericValue(neigh.word.charAt(j)) - Character.getNumericValue(word.charAt(j)));
             }
