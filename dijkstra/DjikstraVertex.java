@@ -108,8 +108,10 @@ public class DjikstraVertex {
         int dist = 0;
         for (int j = 0; j < neigh.word.length(); j++) {
             if (neigh.word.charAt(j) != word.charAt(j)) {
-                dist = Math.abs(Integer.parseInt(String.valueOf(neigh.word.charAt(j)))
-                        - Integer.parseInt(String.valueOf(word.charAt(j))));
+                // dist = Math.abs(Integer.parseInt(String.valueOf(neigh.word.charAt(j)))
+                // - Integer.parseInt(String.valueOf(word.charAt(j))));
+                dist = Math.abs(
+                        Character.getNumericValue(neigh.word.charAt(j)) - Character.getNumericValue(word.charAt(j)));
             }
         }
         return dist;

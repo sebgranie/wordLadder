@@ -19,15 +19,15 @@ public class Main {
 
 		// read in the data here
 		List<String> myWords = new ArrayList<String>();
-		int index = 0;
+		// int index = 0;
 		boolean status = false;
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
 			myWords.add(line);
-			index++;
+			// index++;
 		}
 
-		int initial_array_size = myWords.size();
+		// int initial_array_size = myWords.size();
 		System.out.println("Size of the dictionary :" + myWords.size());
 		System.out.println("BeginWord :" + beginWord);
 		System.out.println("EndWord :" + endWord);
@@ -91,15 +91,18 @@ public class Main {
 					// System.out.println("vertex_inList : " + vertex_inList.word);
 					vertex_inList.setPredecessor(current_vertex);
 					if (!vertex_inList.visited && vertex_inList.word.equals(endWord)) {
-						// TO DO
 						level++;
 						System.out.println("Minimum path distance : " + level);
 						System.out.println("Path with minimum distance:");
-						System.out.println(endWord);
+						LinkedList<String> path = new LinkedList<String>();
 						while (vertex_inList.getPredecessor() != null) {
-							System.out.println(vertex_inList.getPredecessor().word);
+							path.addFirst(vertex_inList.getPredecessor().word);
 							vertex_inList = vertex_inList.getPredecessor();
 						}
+						for (String w : path) {
+							System.out.println(w);
+						}
+						System.out.println(endWord);
 						status = true;
 						break outerloop;
 					}

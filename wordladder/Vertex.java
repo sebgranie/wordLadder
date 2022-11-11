@@ -91,4 +91,5 @@ public class Vertex {
         }
         return diff;
     }
+
 }

@@ -75,19 +75,34 @@ public class DjikstraGraph {
         }
     }
 
-    public void nonVisited() {
+    public void nonVisited(List<DjikstraVertex> sub) {
+        // int count = 0;
         for (DjikstraVertex vertex : vertices) {
-            for (DjikstraVertex vert : vertex.getAdjList()) {
-                vert.visited = false;
+            // System.out.println("count : " + count);
+            // System.out.println("vertex word : " + vertex.word);
+            if (!sub.contains(vertex)) {
+                vertex.visited = false;
+            } else {
+                vertex.visited = true;
             }
+            // System.out.println("visibility : " + vertex.visited);
+            // count++;
+            // vertex.visited = true;
+            // for (DjikstraVertex vert : vertex.getAdjList()) {
+            // if (!sub.contains(vert)) {
+            // vert.visited = false;
+            // }
+            // vert.visited = true;
+            // }
         }
     }
 
     public void initialWeights() {
         for (DjikstraVertex vertex : vertices) {
-            for (DjikstraVertex vert : vertex.getAdjList()) {
-                vert.distance = Integer.MAX_VALUE;
-            }
+            vertex.distance = Integer.MAX_VALUE;
+            // for (DjikstraVertex vert : vertex.getAdjList()) {
+            // vert.distance = Integer.MAX_VALUE;
+            // }
         }
     }
 
