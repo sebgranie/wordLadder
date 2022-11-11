@@ -69,33 +69,40 @@ public class DjikstraMain {
                 subset.add(vert);
             }
         }
-        System.out.println("subset size : " + subset.size());
+        // System.out.println("subset size : " + subset.size());
 
         // initialize distance as infinity for the non-beginWord neighbours
         for (DjikstraVertex vertex : subset.get(0).getAdjList()) {
             vertex.distance = vertex.distanceLetter(subset.get(0));
         }
-        int round = 0;
+        // int round = 0;
+        Queue<DjikstraVertex> queue = new LinkedList<DjikstraVertex>();
+        DjikstraVertex begin = new DjikstraVertex(beginWord);
+        begin.distance = 0;
+        begin.visited = true;
+        queue.offer(begin);
         // Iterate over the queue as long as it is not empty
-        outerloop: while (subset.size() != myWords.size()) {
-            int size = subset.size();
-            System.out.println("size : " + size);
-            System.out.println("round : " + round);
-            for (DjikstraVertex mot : subset)
-                System.out.println(mot.word + " avec une distance vers beginWord de : " + mot.distance);
-
-            // for (Vertex s : queue)
-            // System.out.println("queue :" + s.word + " of size : " + size);
-            // List<Integer> listMininimumWeight = new ArrayList<Integer>();
-            // DjikstraVertex nearest_neighbor = subset.get(0);
-            DjikstraVertex nearest_neighbor = new DjikstraVertex(null); // A REVOIR !!!
-            int nearest_neighbor_dist = Integer.MAX_VALUE;
-            G1.nonVisited(subset); // visited = false if vertex not in subset, otherwise visited = true
+        // outerloop: while (subset.size() != myWords.size()) {
+        outerloop: while (!queue.isEmpty()) {
+            int size = queue.size();
+            // System.out.println("subset size : " + size);
+            // System.out.println("round : " + round);
+            // for (DjikstraVertex mot : queue) {
+            // System.out.println(mot.word + " avec une distance vers beginWord de : " +
+            // mot.distance);
+            // }
+            // DjikstraVertex nearest_neighbor = new DjikstraVertex(null); // A REVOIR !!!
+            // int nearest_neighbor_dist = Integer.MAX_VALUE;
+            // G1.nonVisited(subset); // visited = false if vertex not in subset, otherwise
+            // visited = true
             // subset.get(0).visited = true;
-            for (DjikstraVertex mot1 : subset)
-                System.out.println("mot découvert : " + mot1.word + " sa visibilite : " + mot1.visited);
+            // for (DjikstraVertex mot1 : subset)
+            // System.out.println("mot découvert : " + mot1.word + " sa visibilite : " +
+            // mot1.visited);
             for (int i = 0; i < size; i++) {
-                DjikstraVertex current_vertex = subset.get(i);
+                DjikstraVertex current_vertex = queue.poll();
+                current_vertex.visited = true;
+                // current_vertex.visited = true;
                 // System.out.println("current_vertex:" + current_vertex.word);
                 // System.out.println(myWords);
 
@@ -105,21 +112,26 @@ public class DjikstraMain {
                 // System.out.println(G1.getVertex(myWords.indexOf(current_vertex.word)).getAdjList());
                 // System.out.println();
                 for (DjikstraVertex vertex_inList : G1.getVertex(myWords.indexOf(current_vertex.word)).getAdjList()) {
-                    vertex_inList.setPredecessor(current_vertex);
+                    // if (G1.getVertex(myWords.indexOf(current_vertex.word)).getAdjList().size() ==
+                    // 0) {
+                    // break;
+                    // }
+
                     // if (queue.contains(vertex_inList))
                     // continue;
-                    System.out.println("word vertex in list, distance to current word : " + vertex_inList.word
-                            + " distance :" + vertex_inList.distanceLetter(current_vertex));
-                    System.out.println("visited ? " + vertex_inList.visited);
+                    // System.out.println("word vertex in list, distance to current word : " +
+                    // vertex_inList.word
+                    // + " distance :" + vertex_inList.distanceLetter(current_vertex));
+                    // System.out.println("visited ? " + vertex_inList.visited);
                     if (!vertex_inList.visited) {
                         if (current_vertex.distance
-                                + vertex_inList.distanceLetter(current_vertex) < nearest_neighbor_dist) {
-                            nearest_neighbor = vertex_inList;
-                            nearest_neighbor_dist = current_vertex.distance
+                                + vertex_inList.distanceLetter(current_vertex) < vertex_inList.distance) {
+                            vertex_inList.distance = current_vertex.distance
                                     + vertex_inList.distanceLetter(current_vertex);
+                            vertex_inList.setPredecessor(current_vertex);
                         }
-                        // listMininimumWeight.add(vertex_inList.distance);
                     }
+                    // listMininimumWeight.add(vertex_inList.distance);
                     // System.out.println("vertex_inList : " + vertex_inList.word);
 
                     // if (/* !queue.contains(vertex_inList) &&
@@ -140,24 +152,23 @@ public class DjikstraMain {
                     // break outerloop;
                     // }
                     // vertex_inList.setVisited(true);
-                    // queue.offer(vertex_inList);
+                    if (!vertex_inList.visited) {
+                        queue.offer(vertex_inList);
+                    }
+                    if (!subset.contains(vertex_inList)) {
+                        subset.add(vertex_inList);
+                    }
                 }
                 System.out.println();
             }
-            if (nearest_neighbor != null) {
-                subset.add(nearest_neighbor);
-                nearest_neighbor.distance = nearest_neighbor_dist;
-            }
-            if (nearest_neighbor == null) {
-                break outerloop;
-            }
-            round++;
+            // round++;
         }
 
-        for (DjikstraVertex vertex : subset) {
+        out: for (DjikstraVertex vertex : subset) {
             if (vertex.word.equals(endWord)) {
                 System.out.println("Minimum path distance : " + vertex.distance);
                 System.out.println("Path with minimum distance:");
+                System.out.println(beginWord);
                 LinkedList<String> path = new LinkedList<String>();
                 while (vertex.getPredecessor() != null) {
                     path.addFirst(vertex.getPredecessor().word);
@@ -168,8 +179,35 @@ public class DjikstraMain {
                 }
                 System.out.println(endWord);
                 status = true;
+                break out;
             }
         }
+
+        // for (DjikstraVertex vertex : subset) {
+        // if (vertex.predecessor != null) {
+        // System.out.println(vertex.predecessor.word);
+        // }
+        // }
+        // System.out.println(endWord);
+
+        // for (DjikstraVertex vertex : subset) {
+        // if (vertex.word.equals(endWord)) {
+        // System.out.println("Minimum path distance : " + vertex.distance);
+        // System.out.println("Path with minimum distance:");
+
+        // // LinkedList<String> path = new LinkedList<String>();
+        // // while (vertex.getPredecessor() != null) {
+        // // path.addFirst(vertex.getPredecessor().word);
+        // // vertex = vertex.getPredecessor();
+        // // }
+        // // for (String w : path) {
+        // // System.out.println(w);
+        // // }
+        // // System.out.println(endWord);
+        // status = true;
+        // }
+
+        // }
 
         if (!status) {
             // level = 0;

@@ -10,13 +10,13 @@ public class DjikstraVertex {
     private LinkedList<Integer> indexList; // list of distanceLetter from his neighbour in the adjacency list
     private int index; // index of the vertex in the vertices list
     public String word; // string name of the vertex
-    public int distance; // distance to beginWord with shortes path
+    public int distance = Integer.MAX_VALUE; // distance to beginWord with shortes path
 
     // possibly other fields, for example representing data
     // stored at the node, whether the DjikstraVertex has been visited
     // in a traversal, its predecessor in such a traversal, etc.
 
-    boolean visited; // whether DjikstraVertex has been visited in a traversal
+    boolean visited = false; // whether DjikstraVertex has been visited in a traversal
     DjikstraVertex predecessor; // index of predecessor DjikstraVertex in a traversal
 
     /**
