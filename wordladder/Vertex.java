@@ -5,9 +5,9 @@ public class Vertex {
 
     private LinkedList<Vertex> adjList; // the adjacency list
     private int index; // the index of this vertex in the graph
-    public String word; // name of the Vertex
-    boolean visited; // whether vertex has been visited in a traversal
-    Vertex predecessor; // index of predecessor vertex in a traversal
+    private String word; // name of the Vertex
+    private boolean visited; // whether vertex has been visited in a traversal
+    private Vertex predecessor; // index of predecessor vertex in a traversal
 
     // creates a new instance of Vertex
     public Vertex(String new_word) {
@@ -22,9 +22,17 @@ public class Vertex {
     public void display_adjList() {
         int count = 0;
         for (Vertex vert : adjList) {
-            System.out.println("--> Node " + count + " : " + vert.word);
+            System.out.println("--> Node " + count + " : " + vert.getWord());
             count++;
         }
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String w) {
+        word = w;
     }
 
     public int getIndex() {
@@ -61,8 +69,8 @@ public class Vertex {
 
     public int distance(Vertex neighbour) {
         int diff = 0;
-        for (int i = 0; i < neighbour.word.length(); i++) {
-            if (neighbour.word.charAt(i) != word.charAt(i))
+        for (int i = 0; i < neighbour.getWord().length(); i++) {
+            if (neighbour.getWord().charAt(i) != word.charAt(i))
                 diff++;
         }
         return diff;

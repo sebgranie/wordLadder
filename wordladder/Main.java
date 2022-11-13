@@ -49,17 +49,17 @@ public class Main {
 			int size = queue.size();
 			for (int i = 0; i < size; i++) {
 				Vertex current_vertex = queue.poll();
-				for (Vertex vertex_inList : G.getVertex(myWords.indexOf(current_vertex.word)).getAdjList()) {
-					if (vertex_inList.visited)
+				for (Vertex vertex_inList : G.getVertex(myWords.indexOf(current_vertex.getWord())).getAdjList()) {
+					if (vertex_inList.getVisited())
 						continue;
 					vertex_inList.setPredecessor(current_vertex);
-					if (!vertex_inList.visited && vertex_inList.word.equals(endWord)) {
+					if (!vertex_inList.getVisited() && vertex_inList.getWord().equals(endWord)) {
 						level++;
 						System.out.println("Minimum path distance : " + level);
 						System.out.println("Path with minimum distance:");
 						LinkedList<String> path = new LinkedList<String>();
 						while (vertex_inList.getPredecessor() != null) {
-							path.addFirst(vertex_inList.getPredecessor().word);
+							path.addFirst(vertex_inList.getPredecessor().getWord());
 							vertex_inList = vertex_inList.getPredecessor();
 						}
 						for (String w : path) {

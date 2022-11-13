@@ -8,7 +8,7 @@ import java.util.*;
  * the
  * positions of the alphabet of the non-matching letter
  */
-public class DjikstraMain {
+public class Main {
 
     public static void main(String[] args) throws IOException {
 
@@ -29,6 +29,7 @@ public class DjikstraMain {
             String line = scanner.nextLine();
             myWords.add(line);
         }
+        reader.close();
 
         System.out.println("Size of the dictionary :" + myWords.size());
         System.out.println("BeginWord :" + beginWord);
@@ -45,44 +46,42 @@ public class DjikstraMain {
             throw new RuntimeException(endWord + " is not in word list");
 
         // create graph here
-        DjikstraGraph G1 = new DjikstraGraph(myWords);
-
-        reader.close();
+        DijkstraGraph G1 = new DijkstraGraph(myWords);
 
         // do the work here
-
-        List<DjikstraVertex> subset = new ArrayList<DjikstraVertex>(); // Initialisation
-        for (DjikstraVertex vert : G1.vertices) {
-            if (vert.word.equals(beginWord)) {
-                vert.distance = 0;
+        List<DijkstraVertex> subset = new ArrayList<DijkstraVertex>(); // Initialisation
+        for (DijkstraVertex vert : G1.getVertices()) {
+            if (vert.getWord().equals(beginWord)) {
+                vert.setDistance(0);
                 subset.add(vert);
             }
         }
 
-        for (DjikstraVertex vertex : subset.get(0).getAdjList()) {
-            vertex.distance = vertex.distanceLetter(subset.get(0));
-        }
-        Queue<DjikstraVertex> queue = new LinkedList<DjikstraVertex>();
-        DjikstraVertex begin = new DjikstraVertex(beginWord);
-        begin.distance = 0;
-        begin.visited = true;
+        for (DijkstraVertex vertex : subset.get(0).getAdjList())
+            vertex.setDistance(vertex.distanceLetter(subset.get(0)));
+
+        Queue<DijkstraVertex> queue = new LinkedList<DijkstraVertex>();
+        DijkstraVertex begin = new DijkstraVertex(beginWord);
+        begin.setDistance(0);
+        begin.setVisited(true);
         queue.offer(begin);
         // Iterate over the queue as long as it is not empty
-        outerloop: while (!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             int size = queue.size();
             for (int i = 0; i < size; i++) {
-                DjikstraVertex current_vertex = queue.poll();
-                current_vertex.visited = true;
-                for (DjikstraVertex vertex_inList : G1.getVertex(myWords.indexOf(current_vertex.word)).getAdjList()) {
-                    if (!vertex_inList.visited) {
-                        if (current_vertex.distance
-                                + vertex_inList.distanceLetter(current_vertex) < vertex_inList.distance) {
-                            vertex_inList.distance = current_vertex.distance
-                                    + vertex_inList.distanceLetter(current_vertex);
+                DijkstraVertex current_vertex = queue.poll();
+                current_vertex.setVisited(true);
+                for (DijkstraVertex vertex_inList : G1.getVertex(myWords.indexOf(current_vertex.getWord()))
+                        .getAdjList()) {
+                    if (!vertex_inList.getVisited()) {
+                        if (current_vertex.getDistance()
+                                + vertex_inList.distanceLetter(current_vertex) < vertex_inList.getDistance()) {
+                            vertex_inList.setDistance(
+                                    current_vertex.getDistance() + vertex_inList.distanceLetter(current_vertex));
                             vertex_inList.setPredecessor(current_vertex);
                         }
                     }
-                    if (!vertex_inList.visited) {
+                    if (!vertex_inList.getVisited()) {
                         queue.offer(vertex_inList);
                     }
                     if (!subset.contains(vertex_inList)) {
@@ -92,14 +91,14 @@ public class DjikstraMain {
             }
         }
 
-        out: for (DjikstraVertex vertex : subset) {
-            if (vertex.word.equals(endWord)) {
-                System.out.println("Minimum path distance : " + vertex.distance);
+        out: for (DijkstraVertex vertex : subset) {
+            if (vertex.getWord().equals(endWord)) {
+                System.out.println("Minimum path distance : " + vertex.getDistance());
                 System.out.println("Path with minimum distance:");
                 System.out.println(beginWord);
                 LinkedList<String> path = new LinkedList<String>();
                 while (vertex.getPredecessor() != null) {
-                    path.addFirst(vertex.getPredecessor().word);
+                    path.addFirst(vertex.getPredecessor().getWord());
                     vertex = vertex.getPredecessor();
                 }
                 for (String w : path) {
@@ -110,11 +109,9 @@ public class DjikstraMain {
                 break out;
             }
         }
-
         if (!status) {
             System.out.println("No ladder possible between " + beginWord + " and " + endWord);
         }
-
         // end timer and print total time
         long end = System.currentTimeMillis();
         System.out.println("\nElapsed time: " + (end - start) + " milliseconds");

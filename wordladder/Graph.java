@@ -3,7 +3,7 @@ import java.util.List;
 // class to represent an undirected graph using adjacency lists
 public class Graph {
 
-	public Vertex[] vertices; // the (array of) vertices
+	private Vertex[] vertices; // the (array of) vertices
 	private int numVertices = 0; // number of vertices
 
 	// creates a new instance of Graph with n vertices
@@ -30,6 +30,10 @@ public class Graph {
 		return numVertices;
 	}
 
+	public Vertex[] getVertices() {
+		return vertices;
+	}
+
 	public Vertex getVertex(int n) {
 		return vertices[n];
 	}
@@ -40,7 +44,7 @@ public class Graph {
 
 	public void display_vertex() {
 		for (Vertex vertex : vertices) {
-			System.out.println("Word : " + vertex.word);
+			System.out.println("Word : " + vertex.getWord());
 			vertex.display_adjList();
 		}
 	}
