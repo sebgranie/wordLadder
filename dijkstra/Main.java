@@ -48,31 +48,50 @@ public class Main {
         // create graph here
         DijkstraGraph G1 = new DijkstraGraph(myWords);
 
-        // do the work here
-        List<DijkstraVertex> subset = new ArrayList<DijkstraVertex>(); // Initialisation
+        // Initialisation of the queue with its first element : beginWord
+        Queue<DijkstraVertex> queue = new LinkedList<DijkstraVertex>();
         for (DijkstraVertex vert : G1.getVertices()) {
             if (vert.getWord().equals(beginWord)) {
                 vert.setDistance(0);
-                subset.add(vert);
+                vert.setVisited(true);
+                queue.offer(vert);
             }
         }
-
-        for (DijkstraVertex vertex : subset.get(0).getAdjList())
-            vertex.setDistance(vertex.distanceLetter(subset.get(0)));
-
-        Queue<DijkstraVertex> queue = new LinkedList<DijkstraVertex>();
-        DijkstraVertex begin = new DijkstraVertex(beginWord);
-        begin.setDistance(0);
-        begin.setVisited(true);
-        queue.offer(begin);
+        // Initialise weights to the first neighbours of beginWord
+        for (DijkstraVertex vertex : queue.element().getAdjList())
+            vertex.setDistance(vertex.distanceLetter(queue.element()));
         // Iterate over the queue as long as it is not empty
-        while (!queue.isEmpty()) {
+        outerloop: while (!queue.isEmpty()) {
             int size = queue.size();
             for (int i = 0; i < size; i++) {
                 DijkstraVertex current_vertex = queue.poll();
+                // we set visited = true only when the vertex is added into the
+                // queue to avoid considering any edges related to it that might
+                // be interesting to consider because it has already been processed
                 current_vertex.setVisited(true);
+                // iteration among current_vertex's neighbours
                 for (DijkstraVertex vertex_inList : G1.getVertex(myWords.indexOf(current_vertex.getWord()))
                         .getAdjList()) {
+                    // if we found the endWord
+                    if (!vertex_inList.getVisited() && vertex_inList.getWord().equals(endWord)) {
+                        vertex_inList.setPredecessor(current_vertex);
+                        vertex_inList.setDistance(
+                                current_vertex.getDistance() + vertex_inList.distanceLetter(current_vertex));
+                        System.out.println("Minimum path distance : " + vertex_inList.getDistance());
+                        System.out.println("Path with minimum distance:");
+                        LinkedList<String> path = new LinkedList<String>();
+                        while (vertex_inList.getPredecessor() != null) {
+                            path.addFirst(vertex_inList.getPredecessor().getWord());
+                            vertex_inList = vertex_inList.getPredecessor();
+                        }
+                        for (String w : path)
+                            System.out.println(w);
+                        System.out.print(endWord);
+                        status = true; // Optimal wordladder found
+                        break outerloop;
+                    }
+                    // We figure out if we have found a new optimal path, update : distance &
+                    // predecessor if yes
                     if (!vertex_inList.getVisited()) {
                         if (current_vertex.getDistance()
                                 + vertex_inList.distanceLetter(current_vertex) < vertex_inList.getDistance()) {
@@ -80,37 +99,17 @@ public class Main {
                                     current_vertex.getDistance() + vertex_inList.distanceLetter(current_vertex));
                             vertex_inList.setPredecessor(current_vertex);
                         }
-                    }
-                    if (!vertex_inList.getVisited()) {
+                        // add the vertex to the queue to visit its neighbours and
+                        // make the algorithm continue its research to find the endWord
                         queue.offer(vertex_inList);
                     }
-                    if (!subset.contains(vertex_inList)) {
-                        subset.add(vertex_inList);
-                    }
                 }
             }
         }
-
-        out: for (DijkstraVertex vertex : subset) {
-            if (vertex.getWord().equals(endWord)) {
-                System.out.println("Minimum path distance : " + vertex.getDistance());
-                System.out.println("Path with minimum distance:");
-                System.out.println(beginWord);
-                LinkedList<String> path = new LinkedList<String>();
-                while (vertex.getPredecessor() != null) {
-                    path.addFirst(vertex.getPredecessor().getWord());
-                    vertex = vertex.getPredecessor();
-                }
-                for (String w : path) {
-                    System.out.println(w);
-                }
-                System.out.println(endWord);
-                status = true;
-                break out;
-            }
-        }
+        // The variable status is only set to true when we find a ladder between
+        // beginWord and endWord
         if (!status) {
-            System.out.println("No ladder possible between " + beginWord + " and " + endWord);
+            System.out.print("No ladder possible between " + beginWord + " and " + endWord);
         }
         // end timer and print total time
         long end = System.currentTimeMillis();

@@ -65,7 +65,7 @@ public class Main {
 						for (String w : path) {
 							System.out.println(w);
 						}
-						System.out.println(endWord);
+						System.out.print(endWord);
 						status = true;
 						break outerloop;
 					}
@@ -77,7 +77,7 @@ public class Main {
 		}
 		if (!status) {
 			level = 0;
-			System.out.println("No ladder possible between " + beginWord + " and " + endWord);
+			System.out.print("No ladder possible between " + beginWord + " and " + endWord);
 		}
 		// end timer and print total time
 		long end = System.currentTimeMillis();
