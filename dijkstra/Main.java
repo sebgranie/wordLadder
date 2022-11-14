@@ -2,10 +2,9 @@ import java.io.*;
 import java.util.*;
 
 /**
- * program to find word ladder with shortest distance for two words in a
- * dictionary
- * distance between elements of the word ladder is the absolute difference in
- * the
+ * program to find word ladder with shortest distance for
+ * two words in a dictionary distance between elements of
+ * the word ladder is the absolute difference in the
  * positions of the alphabet of the non-matching letter
  */
 public class Main {
@@ -23,7 +22,6 @@ public class Main {
 
         // read in the data here
         List<String> myWords = new ArrayList<String>();
-
         boolean status = false;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -36,9 +34,9 @@ public class Main {
         System.out.println("EndWord :" + endWord);
 
         /*
-         * If the target word does not exist - Possible to delete these lines as it is
-         * mentioned in the coursework that beginWord and endWord will be in the
-         * dictionnary.
+         * If the target word does not exist - Possible to delete
+         * these lines as it is mentioned in the coursework that
+         * beginWord and endWord will be in the dictionnary.
          */
         if (!myWords.contains(beginWord))
             throw new RuntimeException(beginWord + " is not in word list");
@@ -70,7 +68,7 @@ public class Main {
                 // be interesting to consider because it has already been processed
                 current_vertex.setVisited(true);
                 // iteration among current_vertex's neighbours
-                for (DijkstraVertex vertex_inList : G1.getVertex(myWords.indexOf(current_vertex.getWord()))
+                for (DijkstraVertex vertex_inList : G1.getVertex(current_vertex.getIndex())
                         .getAdjList()) {
                     // if we found the endWord
                     if (!vertex_inList.getVisited() && vertex_inList.getWord().equals(endWord)) {

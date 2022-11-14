@@ -26,22 +26,27 @@ public class Graph {
 		}
 	}
 
+	// getter to the numvertices attribute
 	public int size() {
 		return numVertices;
 	}
 
+	// getter to the vertices attribute
 	public Vertex[] getVertices() {
 		return vertices;
 	}
 
+	// getter to a specific vertex list of neighbours using index
 	public Vertex getVertex(int n) {
 		return vertices[n];
 	}
 
+	// setter to add a vertex and its index in vertices
 	public void setVertex(String word, int i) {
 		vertices[i] = new Vertex(word);
 	}
 
+	// display all the vertex of a graph
 	public void display_vertex() {
 		for (Vertex vertex : vertices) {
 			System.out.println("Word : " + vertex.getWord());
