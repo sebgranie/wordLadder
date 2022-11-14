@@ -24,6 +24,12 @@ You can move on to the **wordladder** folder with the command :
 cd wordladder/
 ```
 
+Oce you are in the wordladder folder and you did not compile before at the root folder, you can still compile the code using the followed command line :
+
+```sh
+javac Main.java Vertex.java
+```
+
 Afterwards, you can execute the code with the followed form :
 
 ```sh
@@ -56,6 +62,12 @@ If you are at the root folder, just do this command :
 
 ```sh
 cd dijkstra/
+```
+
+If you did not compile at the root folder, you can still compile the code using the followed command line :
+
+```sh
+javac Main.java DijkstraVertex.java
 ```
 
 Afterwards, you can actually execute the code with the same command line as before :
